@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>أخبار الذكاء الاصطناعي</title>
+  <meta name="description" content="آخر أخبار الذكاء الاصطناعي من مصادر عالمية موثوقة عبر RSS بدون API Keys" />
+  <style>
+    :root{--bg:#07111f;--bg2:#0c1b2e;--card:rgba(17,31,51,.78);--line:rgba(255,255,255,.09);--gold:#d6b342;--gold2:#f5d96b;--text:#eef4ff;--muted:#a7b5ca;--blue:#39a7ff}
+    *{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;background:radial-gradient(circle at 20% 10%,rgba(214,179,66,.16),transparent 25%),radial-gradient(circle at 80% 0,rgba(57,167,255,.14),transparent 28%),linear-gradient(135deg,var(--bg),var(--bg2));color:var(--text);min-height:100vh}body:before{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:52px 52px;pointer-events:none}.wrap{width:min(1180px,92%);margin:auto;position:relative}.hero{padding:70px 0 35px;text-align:center}.brand{letter-spacing:10px;color:var(--gold);font-size:13px;margin-bottom:20px}.hero h1{font-size:clamp(42px,7vw,86px);margin:0;font-weight:900;line-height:1.08}.hero h1 span{color:var(--gold2)}.hero p{color:var(--muted);font-size:18px;margin:18px auto 0;max-width:760px}.panel{background:rgba(10,22,39,.74);border:1px solid var(--line);box-shadow:0 20px 70px rgba(0,0,0,.3);border-radius:22px;padding:18px;margin:22px 0}.controls{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px}.controls input,.controls select{width:100%;background:#0d1a2c;border:1px solid var(--line);color:var(--text);border-radius:14px;padding:15px 16px;font-size:15px;outline:none}.stats{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;color:var(--muted);font-size:14px}.pill{border:1px solid rgba(214,179,66,.28);background:rgba(214,179,66,.08);padding:9px 13px;border-radius:999px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;padding:16px 0 55px}.card{display:flex;flex-direction:column;min-height:430px;text-decoration:none;color:inherit;background:linear-gradient(180deg,rgba(24,42,66,.92),rgba(12,25,43,.92));border:1px solid var(--line);border-radius:22px;overflow:hidden;transition:.25s;box-shadow:0 18px 50px rgba(0,0,0,.22)}.card:hover{transform:translateY(-6px);border-color:rgba(214,179,66,.55);box-shadow:0 24px 70px rgba(214,179,66,.08)}.img{height:185px;background:linear-gradient(135deg,rgba(214,179,66,.18),rgba(57,167,255,.12));display:grid;place-items:center;color:var(--gold);font-size:42px;font-weight:900}.img img{width:100%;height:100%;object-fit:cover}.body{padding:18px;display:flex;flex-direction:column;gap:11px;flex:1}.meta{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:13px}.source{color:var(--gold2);font-weight:700}.title{font-size:20px;line-height:1.45;margin:0}.summary{color:#c3cee0;line-height:1.65;font-size:14px;margin:0;flex:1}.btn{margin-top:8px;align-self:flex-start;background:linear-gradient(135deg,var(--gold),#8f7422);color:#08111d;padding:11px 16px;border-radius:12px;font-weight:800}.empty,.loading{text-align:center;color:var(--muted);padding:45px}.sources{padding:35px 0 70px}.sources h2{color:var(--gold2)}.sources-list{columns:3;color:var(--muted);line-height:2}.sources-list a{color:#c9d6ea;text-decoration:none}.sources-list a:hover{color:var(--gold2)}@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}.controls{grid-template-columns:1fr}.sources-list{columns:2}}@media(max-width:560px){.grid{grid-template-columns:1fr}.hero{padding-top:45px}.card{min-height:auto}.sources-list{columns:1}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <div class="brand">AI NEWS</div>
+      <h1>أخبار <span>الذكاء الاصطناعي</span></h1>
+      <p>آخر أخبار الذكاء الاصطناعي من مصادر عالمية موثوقة عبر RSS Feeds — بدون API Keys.</p>
+    </section>
+
+    <section class="panel">
+      <div class="controls">
+        <input id="search" placeholder="ابحث عن خبر، شركة، أداة..." />
+        <select id="category"><option value="">كل الأقسام</option></select>
+        <select id="source"><option value="">كل المصادر</option></select>
+      </div>
+      <div class="stats">
+        <span class="pill" id="count">جاري التحميل...</span>
+        <span class="pill">تحديث تلقائي كل ساعة</span>
+        <span class="pill">يفتح الخبر من المصدر الأصلي</span>
+      </div>
+    </section>
+
+    <div id="news" class="grid"><div class="loading">جاري جلب الأخبار الحقيقية...</div></div>
+
+    <section class="panel sources" id="sourcesSection">
+      <h2>المصادر</h2>
+      <div id="sourcesList" class="sources-list"></div>
+    </section>
+  </main>
+
+<script>
+const SOURCES = [
+  {name:'OpenAI Blog', category:'ChatGPT و OpenAI', url:'https://openai.com/blog/rss.xml'},
+  {name:'Google AI Blog', category:'Google AI', url:'https://blog.google/technology/ai/rss/'},
+  {name:'Google DeepMind', category:'Google AI', url:'https://deepmind.google/discover/blog/rss.xml'},
+  {name:'NVIDIA Blog', category:'NVIDIA', url:'https://blogs.nvidia.com/feed/'},
+  {name:'MIT AI News', category:'الأبحاث والدراسات', url:'https://news.mit.edu/rss/topic/artificial-intelligence2'},
+  {name:'ScienceDaily AI', category:'الأبحاث والدراسات', url:'https://www.sciencedaily.com/rss/computers_math/artificial_intelligence.xml'},
+  {name:'VentureBeat AI', category:'الشركات والاستثمار', url:'https://venturebeat.com/category/ai/feed/'},
+  {name:'TechCrunch AI', category:'الشركات والاستثمار', url:'https://techcrunch.com/category/artificial-intelligence/feed/'},
+  {name:'The Verge AI', category:'الذكاء الاصطناعي العام', url:'https://www.theverge.com/rss/ai-artificial-intelligence/index.xml'},
+  {name:'Wired AI', category:'الذكاء الاصطناعي العام', url:'https://www.wired.com/feed/tag/ai/latest/rss'},
+  {name:'Ars Technica AI', category:'الذكاء الاصطناعي العام', url:'https://feeds.arstechnica.com/arstechnica/technology-lab'},
+  {name:'MarkTechPost', category:'أدوات الذكاء الاصطناعي', url:'https://www.marktechpost.com/feed/'},
+  {name:'Unite AI', category:'أدوات الذكاء الاصطناعي', url:'https://www.unite.ai/feed/'},
+  {name:'AI News', category:'الذكاء الاصطناعي العام', url:'https://www.artificialintelligence-news.com/feed/'},
+  {name:'Robotics Tomorrow', category:'الروبوتات', url:'https://www.roboticstomorrow.com/rss/news'},
+  {name:'IEEE Spectrum Robotics', category:'الروبوتات', url:'https://spectrum.ieee.org/feeds/topic/robotics.rss'},
+  {name:'Berkeley AI Research', category:'الأبحاث والدراسات', url:'https://bair.berkeley.edu/blog/feed.xml'},
+  {name:'Amazon Science ML', category:'الأبحاث والدراسات', url:'https://www.amazon.science/index.rss'},
+  {name:'Microsoft Research', category:'الأبحاث والدراسات', url:'https://www.microsoft.com/en-us/research/feed/'},
+  {name:'Hugging Face Blog', category:'أدوات الذكاء الاصطناعي', url:'https://huggingface.co/blog/feed.xml'}
+];
+
+const proxy = url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+const clean = s => (s||'').replace(/<[^>]+>/g,' ').replace(/&nbsp;/g,' ').replace(/\s+/g,' ').trim();
+const imgFrom = item => item.querySelector('enclosure[type^="image"]')?.getAttribute('url') || item.querySelector('media\\:content, content')?.getAttribute('url') || (item.querySelector('description')?.textContent.match(/<img[^>]+src=["']([^"']+)/i)||[])[1] || '';
+const dateFmt = d => d ? new Intl.DateTimeFormat('ar-AE',{dateStyle:'medium'}).format(new Date(d)) : '';
+let allNews = [];
+
+function setupFilters(){
+  const cats=[...new Set(SOURCES.map(s=>s.category))];
+  const srcs=[...new Set(SOURCES.map(s=>s.name))];
+  category.innerHTML='<option value="">كل الأقسام</option>'+cats.map(x=>`<option>${x}</option>`).join('');
+  source.innerHTML='<option value="">كل المصادر</option>'+srcs.map(x=>`<option>${x}</option>`).join('');
+  sourcesList.innerHTML=SOURCES.map(s=>`<a href="${s.url}" target="_blank" rel="noopener">${s.name}</a>`).join('<br>');
+}
+
+async function loadNews(){
+  const cached = localStorage.getItem('ai_news_cache');
+  const cachedAt = +localStorage.getItem('ai_news_cache_time') || 0;
+  if(cached && Date.now()-cachedAt < 3600000){ allNews=JSON.parse(cached); render(); return; }
+  const results = await Promise.allSettled(SOURCES.map(async src=>{
+    const xmlText = await fetch(proxy(src.url)).then(r=>r.text());
+    const xml = new DOMParser().parseFromString(xmlText,'text/xml');
+    return [...xml.querySelectorAll('item, entry')].slice(0,12).map(item=>{
+      const link = item.querySelector('link')?.getAttribute('href') || item.querySelector('link')?.textContent || '';
+      return {title:clean(item.querySelector('title')?.textContent), link, source:src.name, category:src.category, date:item.querySelector('pubDate, published, updated')?.textContent || '', summary:clean(item.querySelector('description, summary, content')?.textContent).slice(0,180), image:imgFrom(item)};
+    });
+  }));
+  const map = new Map();
+  results.flatMap(r=>r.status==='fulfilled'?r.value:[]).flat().filter(n=>n.title&&n.link).forEach(n=>map.set(n.link.split('?')[0],n));
+  allNews=[...map.values()].sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,180);
+  localStorage.setItem('ai_news_cache',JSON.stringify(allNews)); localStorage.setItem('ai_news_cache_time',Date.now());
+  render();
+}
+
+function render(){
+  const q=search.value.trim().toLowerCase(), c=category.value, s=source.value;
+  const list=allNews.filter(n=>(!q||(n.title+n.summary+n.source).toLowerCase().includes(q))&&(!c||n.category===c)&&(!s||n.source===s));
+  count.textContent=`${list.length} خبر معروض من ${allNews.length} خبر`;
+  news.innerHTML = list.length ? list.map(n=>`<a class="card" href="${n.link}" target="_blank" rel="noopener noreferrer"><div class="img">${n.image?`<img src="${n.image}" loading="lazy" onerror="this.remove()">`:'AI'}</div><div class="body"><div class="meta"><span class="source">${n.source}</span><span>${dateFmt(n.date)}</span></div><h2 class="title">${n.title}</h2><p class="summary">${n.summary||'اضغط لقراءة التفاصيل من المصدر الأصلي.'}</p><span class="btn">قراءة الخبر</span></div></a>`).join('') : '<div class="empty">لا توجد أخبار مطابقة حالياً.</div>';
+}
+
+setupFilters(); loadNews(); setInterval(loadNews,3600000);
+search.oninput=category.onchange=source.onchange=render;
+</script>
+</body>
+</html>
